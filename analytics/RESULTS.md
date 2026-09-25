@@ -100,7 +100,7 @@ Mean 32.0967 > median 14.4542 > mode 8.0500: fare is right-skewed, consistent wi
 | parch    |     0.0832 |   0.0168 | -0.1715 |  0.4145 |  1.0000 |  0.2175 |
 | fare     |     0.2553 |  -0.5482 |  0.0937 |  0.1609 |  0.2175 |  1.0000 |
 
-pclass versus fare: r=-0.5482. Higher numerical class denotes cheaper travel classes, explaining the negative association with fare. sibsp versus parch: r=0.4145. Passengers traveling with siblings/spouses also tend to travel with parents/children. These are the two largest absolute correlations among unique off-diagonal pairs; boolean adult_male and alone are excluded.
+pclass versus fare (r=-0.5482): Higher numerical class denotes cheaper travel classes, explaining the negative association with fare. sibsp versus parch (r=0.4145): Passengers traveling with siblings/spouses also tend to travel with parents/children. These are the two largest absolute correlations among unique off-diagonal pairs; boolean adult_male and alone are excluded.
 
 ## Chart 2 — sex and class survival
 

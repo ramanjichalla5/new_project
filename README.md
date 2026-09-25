@@ -85,7 +85,7 @@ git log --graph --oneline --all
 
 Tests cover malformed rows, conversion, foreign keys, idempotency, train-only transforms, raw-input reload, real retrieval for all eight documents, graph routes, request validation, and bounded LLM retries. Download MiniLM once before offline tests. The feature branch `codex/zepto-platform` carries multiple commits and is merged with a merge commit so the scored Git history remains visible.
 
-Verified local run: 100 books across 29 categories; all six SQL queries executed and JOIN equivalence passed; Titanic EDA/modeling and raw-input reload completed; **11 tests passed**; both live Uvicorn example calls returned HTTP 200 with model-cache offline mode enabled. Container verification is handled by the GitHub Actions workflow because the local Docker engine is unavailable. AWS deployment remains pending authenticated target access.
+Verified local run: 100 books across 29 categories; all six SQL queries executed and JOIN equivalence passed; Titanic EDA/modeling and raw-input reload completed; **11 tests passed**; both live Uvicorn example calls returned HTTP 200 with model-cache offline mode enabled. The [Linux CI run](https://github.com/ramanjichalla5/new_project/actions/runs/36155416030) also passed all tests and successfully **built the Docker image and verified both API routes with container networking disabled**. AWS deployment remains pending authenticated target access.
 
 ## References and authorship
 

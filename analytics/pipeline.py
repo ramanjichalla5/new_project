@@ -145,7 +145,7 @@ def run(offline=False):
         frozenset(['sibsp', 'parch']): 'Passengers traveling with siblings/spouses also tend to travel with parents/children.',
         frozenset(['pclass', 'age']): 'Older passengers tend to travel in lower-numbered, higher-status classes.'}
     section('Chart 1 — six-column correlation heatmap', corr.to_markdown(floatfmt='.4f') + '\n\n' + ' '.join(
-        f'{a} versus {b}: r={value:.4f}. ' + explanations.get(frozenset([a,b]), 'This is association, not a causal effect.')
+        f'{a} versus {b} (r={value:.4f}): ' + explanations.get(frozenset([a,b]), 'This is association, not a causal effect.')
         for a,b,value in pairs[:2]) + ' These are the two largest absolute correlations among unique off-diagonal pairs; '
         'boolean adult_male and alone are excluded.')
     sns.barplot(data=cleaned, x='pclass', y='survived', hue='sex', errorbar=None, ax=axes[1, 1])

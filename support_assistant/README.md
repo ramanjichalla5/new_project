@@ -26,6 +26,8 @@ For the optional provider path, set GROQ_API_KEY and a currently available GROQ_
 
 ## Deployment
 
+Container validation passed on Linux in [GitHub Actions](https://github.com/ramanjichalla5/new_project/actions/runs/36155416030): image build, non-root startup, health check, policy retrieval, and general routing all succeeded with `docker run --network none`. All 11 integration/unit tests also passed locally and in Linux CI.
+
 Only this module is intended for AWS deployment, after project verification. deploy.py uses an existing local AWS profile and SSM-managed Linux instance in eu-central-1. See the root README for prerequisites and command. It creates no instances or public firewall rules. No host IP is claimed until the live service is deployed and verified externally.
 
 ## Executed examples
