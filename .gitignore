@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+pytest-cache-files-*/
+.venv/
+.env
+*.pem
+*.key
+runtime/
+.aws/
+deployment.json

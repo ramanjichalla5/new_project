@@ -1,0 +1,56 @@
+name: Verify platform and offline container
+on:
+  push:
+    branches: [main, codex/zepto-platform]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CPU-only support image including MiniLM
+        run: docker build -f support_assistant/Dockerfile -t zepto-support:test .
+      - name: Verify both routes with networking disabled
+        shell: bash
+        run: |
+          docker run -d --name zepto-check --network none zepto-support:test
+          ready=0
+          for attempt in $(seq 1 90); do
+            if docker exec zepto-check python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7860/health')"; then ready=1; break; fi
+            sleep 2
+          done
+          if [ "$ready" != 1 ]; then docker logs zepto-check; exit 1; fi
+          docker exec -i zepto-check python - <<'PY'
+          import json, urllib.request
+          def ask(query):
+              req = urllib.request.Request('http://127.0.0.1:7860/ask', data=json.dumps({'query':query}).encode(), headers={'Content-Type':'application/json'})
+              return json.load(urllib.request.urlopen(req))
+          policy = ask('What is the standard delivery fee?')
+          general = ask('What is two plus two?')
+          assert policy['sources'][0] == 'doc_01', policy
+          assert policy['answer'].startswith('Based on the retrieved context: ')
+          assert general['sources'] == [], general
+          assert general['answer'] == 'I can only answer questions about Zepto policies right now.'
+          print(json.dumps({'policy':policy, 'general':general}, indent=2))
+          PY
+      - name: Container logs
+        if: always()
+        run: docker logs zepto-check || true
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python analytics/pipeline.py --offline
+      - run: python analytics/predict.py
