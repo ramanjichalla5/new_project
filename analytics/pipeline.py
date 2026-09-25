@@ -195,6 +195,13 @@ def run(offline=False):
     plot_tree(models['Decision Tree']['model'],
               feature_names=models['Decision Tree']['preprocess'].get_feature_names_out(),
               class_names=['Died', 'Survived'], filled=True, ax=axes[2, 1], fontsize=4)
+    tree_fig, tree_ax = plt.subplots(figsize=(26, 12))
+    plot_tree(models['Decision Tree']['model'],
+              feature_names=models['Decision Tree']['preprocess'].get_feature_names_out(),
+              class_names=['Died', 'Survived'], filled=True, ax=tree_ax, fontsize=9)
+    tree_fig.tight_layout()
+    tree_fig.savefig(HERE / 'tree.png', dpi=150)
+    plt.close(tree_fig)
     variants = {'Baseline': clone(models['Logistic Regression']),
                 'Balanced': classifier(LogisticRegression(max_iter=2000, class_weight='balanced', random_state=SEED)),
                 'SMOTE': ImbPipeline([('preprocess', preprocessing()), ('smote', SMOTE(random_state=SEED)),
@@ -274,7 +281,8 @@ def run(offline=False):
     fig.savefig(HERE / 'charts.png', dpi=150)
     plt.close(fig)
     notes.insert(2, 'All required plots are consolidated in [charts.png](charts.png): row 1 univariate, '
-                 'row 2 multivariate story, row 3 ROC, labeled tree, and residuals.')
+                 'row 2 multivariate story, row 3 ROC, labeled tree, and residuals. '
+                 'The full-size labeled tree is [tree.png](tree.png).')
     (HERE / 'RESULTS.md').write_text('\n\n'.join(notes)+'\n', encoding='utf-8')
     print(comparison.to_string())
     print(f'Saved full pipeline: {winner}; report: {HERE / "RESULTS.md"}', flush=True)
